@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Blog - {{ title }}</title>
-    </head>
-    <body>
-        <p>Hello, {{ user.name }}</p>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hello</h1>
+    <p>Hello, {{ user.name }}</p>
+{% endblock %}
