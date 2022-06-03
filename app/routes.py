@@ -1,10 +1,12 @@
 from app import app, db
 from flask import render_template, flash, url_for, redirect, request
-from .forms.login import Login as LoginForm
-from .forms.registration import Registration as RegistrationForm
-from .forms.edit_user import EditProfile as EditProfileForm
+from app.forms.login import Login as LoginForm
+from app.forms.registration import Registration as RegistrationForm
+from app.forms.edit_user import EditProfile as EditProfileForm
+from app.forms.post import Post as PostForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models.user import User
+from app.models.post import Post
 from datetime import datetime
 
 @app.before_request
@@ -17,8 +19,8 @@ def before_request():
 @app.route('/index')
 @login_required
 def index():
-    user = {'name': 'World'}
-    return render_template('index.html', title='Index', user=user)
+    posts = current_user.own_post()
+    return render_template('index.html', title='Index', posts=posts)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -78,3 +80,16 @@ def edit_profile():
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
+
+@app.route('/new_post', methods=['GET', 'POST'])
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data, body=form.body.data, author=current_user)
+        if post.add():
+            flash('post added')
+        else:
+            flash('Sorry something went wrong')
+        return redirect(url_for('index'))
+    return render_template("new_post.html", title="Add New Post", form=form)

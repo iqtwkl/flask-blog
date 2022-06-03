@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from logging.handlers import RotatingFileHandler
-import os
+import os, logging
 
 app = Flask(__name__)
 app.config.from_object(Config)

@@ -3,4 +3,11 @@
 {% block content %}
     <h1>Hello</h1>
     <p>Hello, {{ current_user.username }}</p>
+    <h1>Post</h1>
+    <a href="{{ url_for('new_post') }}">new Post</a>
+    {% for post in posts %}
+    <p>
+    {{ post.title }} by {{ post.author.username }} says: <b>{{ post.body }}</b>
+    </p>
+    {% endfor %}
 {% endblock %}
