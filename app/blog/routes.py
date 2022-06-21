@@ -6,19 +6,13 @@ from flask_login import current_user, login_required
 from app.models.post import Post
 from datetime import datetime
 
-@bp.before_request
-def before_request():
-    if current_user.is_authenticated:
-        current_user.last_seen = datetime.utcnow()
-        db.session.commit()
-
 @bp.route('/')
 @bp.route('/index')
 @login_required
 def index():
     post = Post()
     posts = post.all()
-    return render_template('index.html', title='Index', posts=posts)
+    return render_template('blog/index.html', title='Index', posts=posts)
 
 @bp.route('/new_post', methods=['GET', 'POST'])
 @login_required

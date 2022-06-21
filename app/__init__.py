@@ -24,6 +24,9 @@ app.register_blueprint(auth_bp, url_prefix='/auth')
 from app.blog import bp as blog_bp
 app.register_blueprint(blog_bp, url_prefix='/blog')
 
+from app.main import bp as main_bp
+app.register_blueprint(main_bp)
+
 if not os.path.exists('logs'):
     os.mkdir('logs')
 file_handler = RotatingFileHandler('logs/log.log', maxBytes=10240, backupCount=10)
