@@ -9,12 +9,12 @@
 {% endblock %}
 
 {% block navbar %}
-    Blog : <a href="/index">Home</a> | 
+    Blog : <a href="/blog/index">Home</a> | 
     {% if current_user.is_anonymous %}
-        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('auth.login') }}">Login</a>
     {% else %}
-        <a href="{{ url_for('user', username=current_user.username) }}">Profile</a> |
-        <a href="{{ url_for('logout') }}">Logout</a>
+        <a href="{{ url_for('auth.user', username=current_user.username) }}">Profile</a> |
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
     {% endif %}
 {% endblock %}
     

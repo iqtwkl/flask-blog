@@ -18,3 +18,6 @@ class Post(db.Model):
             return self
         except:
             return 0
+
+    def all(self):
+        return self.query.all()

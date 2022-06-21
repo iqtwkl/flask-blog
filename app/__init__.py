@@ -12,8 +12,18 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
-login.login_view = 'login'
+login.login_view = 'auth.login'
 bootstrap = Bootstrap(app)
+
+from app.errors import bp as error_bp
+app.register_blueprint(error_bp)
+
+from app.auth import bp as auth_bp
+app.register_blueprint(auth_bp, url_prefix='/auth')
+
+from app.blog import bp as blog_bp
+app.register_blueprint(blog_bp, url_prefix='/blog')
+
 if not os.path.exists('logs'):
     os.mkdir('logs')
 file_handler = RotatingFileHandler('logs/log.log', maxBytes=10240, backupCount=10)
@@ -21,4 +31,4 @@ file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(messag
 file_handler.setLevel(logging.INFO)
 app.logger.info('blog start')
 
-from app import routes, models
+from app import models
