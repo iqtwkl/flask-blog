@@ -3,3 +3,4 @@ SECRET_KEY=hallo-this-is-secret
 DATABASE_URL=localhost:5432
 DATABASE_USER=databasename
 DATABASE_PASS=databasepassword
+FLASK_ENV=development
