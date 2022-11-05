@@ -5,12 +5,14 @@ from app import login
 from hashlib import md5
 from datetime import datetime
 from app.models.post import Post
+from app.models.pagination import PaginatedAPIMixin
+from flask import url_for
 
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
-class User(UserMixin, db.Model):
+class User(PaginatedAPIMixin, UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -42,3 +44,28 @@ class User(UserMixin, db.Model):
 
     def own_post(self):
         return Post.query.filter_by(user_id=self.id)
+
+    def to_dict(self, include_email=False):
+        data = {
+            'id': self.id,
+            'username': self.username,
+            'last_seen': self.last_seen,
+            'about_me': self.about_me,
+            '_links': {
+                'self': url_for('api.get_user', id=self.id),
+                'avatar': self.avatar(128)
+            }
+        }
+
+        if include_email:
+            data['email']: self.email
+
+        return data
+
+    def from_dict(self, data, new_user=False):
+        for field in ['username', 'email', 'about_me']:
+            if field in data:
+                setattr(self, field, data[field])
+
+        if new_user and 'password' in data:
+            self.set_password(data['password'])
